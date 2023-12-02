@@ -37,7 +37,7 @@ func main() {
 		panic(err)
 	}
 
-	// part1(lines)
+	part1(lines)
 
 	part2(lines)
 
@@ -125,7 +125,6 @@ func regexToNumber(s string, isReverse bool) (string, error) {
 	// Convert the input string to lowercase for case-insensitive comparison
 	lowercaseInput := strings.ToLower(s)
 
-	// Map of number words to their corresponding integers
 	var numberList []string
 	numberList = append(numberList,
 		"one",
@@ -169,34 +168,6 @@ func regexToNumber(s string, isReverse bool) (string, error) {
 
 	// If no match is found, return an error
 	return "", fmt.Errorf("unsupported string: %s", s)
-}
-
-func stringToInt(s string) (int, error) {
-	// Convert the input string to lowercase for case-insensitive comparison
-	lowercaseInput := strings.ToLower(s)
-
-	// Map of number words to their corresponding integers
-	numberMapReverse := map[string]int{
-		"eno":   1,
-		"owt":   2,
-		"eerht": 3,
-		"ruof":  4,
-		"evif":  5,
-		"xis":   6,
-		"neves": 7,
-		"thgie": 8,
-		"enin":  9,
-	}
-
-	// Iterate over the map to find a match in the input string
-	for word, value := range numberMapReverse {
-		if strings.Contains(lowercaseInput, word) {
-			return value, nil
-		}
-	}
-
-	// If no match is found, return an error
-	return 0, fmt.Errorf("unsupported string: %s", s)
 }
 
 func letterToStringNumber(s string) (string, error) {
@@ -307,21 +278,6 @@ func reverseString(input string) string {
 	reversedString := string(runes)
 
 	return reversedString
-}
-
-func appendToRight(originalInt, newInt int) int {
-	// Calculate the number of digits in the new integer
-	digits := 1
-	temp := newInt
-	for temp >= 10 {
-		temp /= 10
-		digits *= 10
-	}
-
-	// Append the new integer to the right of the original integer
-	result := originalInt*digits + newInt
-
-	return result
 }
 
 func readLines(path string) ([]string, error) {
