@@ -1,9 +1,7 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 	"unicode"
@@ -32,6 +30,11 @@ const (
 )
 
 func main() {
+	// day1()
+	day2()
+}
+
+func day1() {
 	lines, err := readLines("day1.txt")
 	if err != nil {
 		panic(err)
@@ -40,7 +43,6 @@ func main() {
 	part1(lines)
 
 	part2(lines)
-
 }
 
 func part2(lines []string) int {
@@ -260,40 +262,4 @@ func part1(lines []string) int {
 	}
 	fmt.Printf("Total: %v\n", sumTotal)
 	return sumTotal
-}
-
-func reverseString(input string) string {
-	// Convert the string to a slice of runes
-	runes := []rune(input)
-
-	// Get the length of the slice
-	length := len(runes)
-
-	// Reverse the order of the runes in the slice
-	for i, j := 0, length-1; i < j; i, j = i+1, j-1 {
-		runes[i], runes[j] = runes[j], runes[i]
-	}
-
-	// Convert the slice of runes back to a string
-	reversedString := string(runes)
-
-	return reversedString
-}
-
-func readLines(path string) ([]string, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	var lines []string
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-	if err := scanner.Err(); err != nil {
-		return nil, err
-	}
-	return lines, nil
 }
