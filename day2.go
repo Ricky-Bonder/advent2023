@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"slices"
 	"strconv"
 	"strings"
 )
@@ -17,44 +16,40 @@ func day2() {
 		lineParser(line)
 	}
 
-	tot := sumAllGameNumbers(possibleGameNumberSum)
 	fmt.Printf("Part One Game Number Total: %v\n", possibleGameNumberSum)
-	fmt.Printf("Part One Game Number Total: %v\n", tot)
 }
 
-var possibleGameNumberSum []int
+var possibleGameNumberSum int
 
 func lineParser(line string) {
 	fmt.Println("LINE:", line)
 	gameNum, AllRoundsInAGame := getGameNumber(line)
 	gameNumInt, _ := strconv.Atoi(gameNum)
-	possibleGameNumberSum = append(possibleGameNumberSum, gameNumInt)
 
 	separatedRoundsInAGame := getRoundInGame(AllRoundsInAGame)
 	var isGamePossible bool = true
-	var totalRed int = 0
-	var totalBlue int = 0
-	var totalGreen int = 0
+	var maxRed int = 0
+	var maxBlue int = 0
+	var maxGreen int = 0
 	for i := 0; i < len(separatedRoundsInAGame); i++ {
 		red, blue, green := getCubesCountInASingleRound(separatedRoundsInAGame[i])
-		totalRed += red
-		totalBlue += blue
-		totalGreen += green
-		isGamePossible = checkRoundIsPossible(red, blue, green)
-		if !isGamePossible && slices.Contains(possibleGameNumberSum, gameNumInt) {
-			possibleGameNumberSum = remove(possibleGameNumberSum, gameNumInt)
+		if red > maxRed {
+			maxRed = red
+		}
+		if blue > maxBlue {
+			maxBlue = blue
+		}
+		if green > maxGreen {
+			maxGreen = green
 		}
 	}
-	if totalRed > 12 && isGamePossible && slices.Contains(possibleGameNumberSum, gameNumInt) {
-		possibleGameNumberSum = remove(possibleGameNumberSum, gameNumInt)
+	fmt.Printf("Max Red Cubes: %v\n", maxRed)
+	fmt.Printf("Max Green Cubes: %v\n", maxGreen)
+	fmt.Printf("Max Blue Cubes: %v\n", maxBlue)
+	isGamePossible = checkRoundIsPossible(maxRed, maxBlue, maxGreen)
+	if isGamePossible {
+		possibleGameNumberSum += gameNumInt
 	}
-	if totalBlue > 14 && isGamePossible && slices.Contains(possibleGameNumberSum, gameNumInt) {
-		possibleGameNumberSum = remove(possibleGameNumberSum, gameNumInt)
-	}
-	if totalGreen > 13 && isGamePossible && slices.Contains(possibleGameNumberSum, gameNumInt) {
-		possibleGameNumberSum = remove(possibleGameNumberSum, gameNumInt)
-	}
-
 }
 
 func sumAllGameNumbers(slice []int) int {
@@ -94,21 +89,21 @@ func getCubesCountInASingleRound(separatedRoundsInAGame string) (int, int, int) 
 			countAndColor, _ = strings.CutSuffix(countAndColor, " ")
 			singleCountAndColor := strings.Split(countAndColor, " ")
 			count, _ := strconv.Atoi(singleCountAndColor[0])
-			redCubes += count
+			redCubes = count
 			fmt.Printf("redCubes: %v\n", redCubes)
 		} else if strings.Contains(countAndColor, "blue") {
 			countAndColor, _ = strings.CutPrefix(countAndColor, " ")
 			countAndColor, _ = strings.CutSuffix(countAndColor, " ")
 			singleCountAndColor := strings.Split(countAndColor, " ")
 			count, _ := strconv.Atoi(singleCountAndColor[0])
-			blueCubes += count
+			blueCubes = count
 			fmt.Printf("blueCubes: %v\n", blueCubes)
 		} else if strings.Contains(countAndColor, "green") {
 			countAndColor, _ = strings.CutPrefix(countAndColor, " ")
 			countAndColor, _ = strings.CutSuffix(countAndColor, " ")
 			singleCountAndColor := strings.Split(countAndColor, " ")
 			count, _ := strconv.Atoi(singleCountAndColor[0])
-			greenCubes += count
+			greenCubes = count
 			fmt.Printf("greenCubes: %v\n", greenCubes)
 		}
 	}
