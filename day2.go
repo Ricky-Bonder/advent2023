@@ -13,10 +13,47 @@ func day2() {
 	}
 
 	for _, line := range lines {
-		lineParser(line)
+		// lineParser(line)
+
+		lineParserPart2(line)
 	}
 
 	fmt.Printf("Part One Game Number Total: %v\n", possibleGameNumberSum)
+	fmt.Printf("Part Two Power sum Total: %v\n", powerSumTogether)
+}
+
+var powerSumTogether int
+
+func lineParserPart2(line string) {
+	fmt.Println("LINE:", line)
+	_, AllRoundsInAGame := getGameNumber(line)
+
+	separatedRoundsInAGame := getRoundInGame(AllRoundsInAGame)
+	var maxRed int = 0
+	var maxBlue int = 0
+	var maxGreen int = 0
+	for i := 0; i < len(separatedRoundsInAGame); i++ {
+		red, blue, green := getCubesCountInASingleRound(separatedRoundsInAGame[i])
+		if red > maxRed {
+			maxRed = red
+		}
+		if blue > maxBlue {
+			maxBlue = blue
+		}
+		if green > maxGreen {
+			maxGreen = green
+		}
+	}
+	fmt.Printf("Max Red Cubes: %v\n", maxRed)
+	fmt.Printf("Max Green Cubes: %v\n", maxGreen)
+	fmt.Printf("Max Blue Cubes: %v\n", maxBlue)
+	power := getRoundPower(maxRed, maxBlue, maxGreen)
+
+	powerSumTogether += power
+}
+
+func getRoundPower(red int, blue int, green int) int {
+	return red * blue * green
 }
 
 var possibleGameNumberSum int
@@ -90,21 +127,18 @@ func getCubesCountInASingleRound(separatedRoundsInAGame string) (int, int, int) 
 			singleCountAndColor := strings.Split(countAndColor, " ")
 			count, _ := strconv.Atoi(singleCountAndColor[0])
 			redCubes = count
-			fmt.Printf("redCubes: %v\n", redCubes)
 		} else if strings.Contains(countAndColor, "blue") {
 			countAndColor, _ = strings.CutPrefix(countAndColor, " ")
 			countAndColor, _ = strings.CutSuffix(countAndColor, " ")
 			singleCountAndColor := strings.Split(countAndColor, " ")
 			count, _ := strconv.Atoi(singleCountAndColor[0])
 			blueCubes = count
-			fmt.Printf("blueCubes: %v\n", blueCubes)
 		} else if strings.Contains(countAndColor, "green") {
 			countAndColor, _ = strings.CutPrefix(countAndColor, " ")
 			countAndColor, _ = strings.CutSuffix(countAndColor, " ")
 			singleCountAndColor := strings.Split(countAndColor, " ")
 			count, _ := strconv.Atoi(singleCountAndColor[0])
 			greenCubes = count
-			fmt.Printf("greenCubes: %v\n", greenCubes)
 		}
 	}
 	return redCubes, blueCubes, greenCubes
